@@ -1,0 +1,19 @@
+name = "idamazon"
+main = "build/worker/shim.mjs"
+compatibility_date = "2024-05-23"
+minify = true
+
+[[kv_namespaces]]
+binding = "SIREN"
+id = "06d9b00fc8c3470dbe261c9a3ff49af4"
+
+[build]
+command = "cargo install worker-build && worker-build --release"
+
+[env.dev]
+build = { command = "cargo install worker-build && worker-build --dev" }
+
+[vars]
+UUID = "e169277f-b733-4841-aff2-59df23ce9672"
+MAIN_PAGE_URL = "https://raw.githubusercontent.com/hounna19/newrepo/refs/heads/master/web/index.html"
+SUB_PAGE_URL = "https://raw.githubusercontent.com/hounna19/newrepo/refs/heads/master/web/sub.html"
