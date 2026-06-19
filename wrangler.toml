@@ -1,4 +1,4 @@
-name = "idamazon"
+name = "hsishjw949428"
 main = "build/worker/shim.mjs"
 compatibility_date = "2024-05-23"
 minify = true
@@ -14,6 +14,6 @@ command = "cargo install worker-build@^0.1 && worker-build --release"
 build = { command = "cargo install worker-build@^0.1 && worker-build --dev" }
 
 [vars]
-UUID = "e169277f-b733-4841-aff2-59df23ce9672"
+UUID = "7872374c-6264-46c0-b867-f0715c62af87"
 MAIN_PAGE_URL = "https://raw.githubusercontent.com/hounna19/newrepo/refs/heads/master/web/index.html"
 SUB_PAGE_URL = "https://raw.githubusercontent.com/hounna19/newrepo/refs/heads/master/web/sub.html"
