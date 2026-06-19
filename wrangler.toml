@@ -8,7 +8,7 @@ binding = "SIREN"
 id = "06d9b00fc8c3470dbe261c9a3ff49af4"
 
 [build]
-command = "cargo install wasm-bindgen-cli --version 0.2.100 && cargo install worker-build@^0.1 && worker-build --release"
+command = "cargo install worker-build@^0.1 && worker-build --release"
 
 [env.dev]
 build = { command = "cargo install worker-build@^0.1 && worker-build --dev" }
