@@ -18,21 +18,42 @@ static PROXYKV_PATTERN: Lazy<Regex> = Lazy::new(|| Regex::new(r"^([A-Z]{2})").un
 
 #[event(fetch)]
 async fn main(req: Request, env: Env, _: Context) -> Result<Response> {
+    console_log!("STEP 1");
+
     let uuid = env
         .var("UUID")
         .map(|x| Uuid::parse_str(&x.to_string()).unwrap_or_default())?;
+
+    console_log!("STEP 2");
+
     let host = req.url()?.host().map(|x| x.to_string()).unwrap_or_default();
+
+    console_log!("STEP 3");
+
     let main_page_url = env.var("MAIN_PAGE_URL").map(|x|x.to_string()).unwrap();
+
+    console_log!("STEP 4");
+
     let sub_page_url = env.var("SUB_PAGE_URL").map(|x|x.to_string()).unwrap();
-    let config = Config { uuid, host: host.clone(), proxy_addr: host, proxy_port: 443, main_page_url, sub_page_url };
+
+    console_log!("STEP 5");
+
+    let config = Config {
+        uuid,
+        host: host.clone(),
+        proxy_addr: host,
+        proxy_port: 443,
+        main_page_url,
+        sub_page_url
+    };
+
+    console_log!("STEP 6");
 
     Router::with_data(config)
         .on_async("/", fe)
         .on_async("/sub", sub)
         .on("/link", link)
-        // existing generic route that handles /:proxyip (e.g. /ID, /KR, /US, or ip-port-like)
         .on_async("/:proxyip", tunnel)
-        // explicit aliases for protocols (will be handled by same tunnel handler)
         .on_async("/vmess", tunnel)
         .on_async("/vless", tunnel)
         .on_async("/trojan", tunnel)
