@@ -7,16 +7,19 @@ on:
     branches:
       - master
     paths-ignore:
-      - 'README.md'
-      - 'LICENSE.md'
+      - README.md
+      - LICENSE.md
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
     environment: cf
+
     steps:
       - uses: actions/checkout@v4
-      - name: deploy
+
+      - name: Deploy to Cloudflare Workers
         uses: cloudflare/wrangler-action@v3
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          wranglerVersion: latest
