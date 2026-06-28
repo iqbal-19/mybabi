@@ -1,0 +1,10 @@
+name = "xirefe"
+
+main = "build/worker/shim.mjs"
+
+compatibility_date = "2025-06-01"
+
+workers_dev = true
+
+[build]
+command = "cargo install worker-build --locked && worker-build --release"
