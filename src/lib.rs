@@ -17,10 +17,29 @@ static PROXYIP_PATTERN: Lazy<Regex> = Lazy::new(|| Regex::new(r"^.+-\d+$").unwra
 static PROXYKV_PATTERN: Lazy<Regex> = Lazy::new(|| Regex::new(r"^([A-Z]{2})").unwrap());
 
 #[event(fetch)]
-async fn main(_: Request, _: Env, _: Context) -> Result<Response> {
-    Response::ok("Hello World")
-}
+async fn main(req: Request, env: Env, _: Context) -> Result<Response> {
+    let uuid = env
+        .var("UUID")
+        .map(|x| Uuid::parse_str(&x.to_string()).unwrap_or_default())?;
+    let host = req.url()?.host().map(|x| x.to_string()).unwrap_or_default();
+    let main_page_url = env.var("MAIN_PAGE_URL").map(|x|x.to_string()).unwrap();
+    let sub_page_url = env.var("SUB_PAGE_URL").map(|x|x.to_string()).unwrap();
+    let config = Config { uuid, host: host.clone(), proxy_addr: host, proxy_port: 443, main_page_url, sub_page_url };
 
+    Router::with_data(config)
+        .on_async("/", fe)
+        .on_async("/sub", sub)
+        .on("/link", link)
+        // existing generic route that handles /:proxyip (e.g. /ID, /KR, /US, or ip-port-like)
+        .on_async("/:proxyip", tunnel)
+        // explicit aliases for protocols (will be handled by same tunnel handler)
+        .on_async("/vmess", tunnel)
+        .on_async("/vless", tunnel)
+        .on_async("/trojan", tunnel)
+        .on_async("/shadowsocks", tunnel)
+        .run(req, env)
+        .await
+}
 async fn get_response_from_url(url: String) -> Result<Response> {
     let req = Fetch::Url(Url::parse(url.as_str())?);
     let mut res = req.send().await?;
