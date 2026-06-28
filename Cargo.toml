@@ -7,10 +7,10 @@ edition = "2021"
 crate-type = ["cdylib"]
 
 [dependencies]
-worker = "0.5.0"
+worker = "0.8.5"
 
 [profile.release]
 opt-level = "z"
 lto = true
-codegen-units = 1
 strip = true
+codegen-units = 1
